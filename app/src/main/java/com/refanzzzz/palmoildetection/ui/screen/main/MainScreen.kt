@@ -19,10 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.refanzzzz.palmoildetection.ui.component.CameraButton
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +49,7 @@ fun MainScreen() {
                     .padding(12.dp)
             ) {
                 CameraButton {
-
+                    navController.navigate("camera")
                 }
                 Text(
                     text = "Scan Now",
@@ -112,7 +113,7 @@ fun MainScreen() {
                         )
                     }
                     LinearProgressIndicator(
-                        progress = 0.2f,
+                        progress = { 0.2f },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(8.dp),
@@ -135,7 +136,7 @@ fun MainScreen() {
                         )
                     }
                     LinearProgressIndicator(
-                        progress = 0.4f,
+                        progress = { 0.4f },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(8.dp),
@@ -152,5 +153,5 @@ fun MainScreen() {
 @Preview(showSystemUi = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen()
+//    MainScreen()
 }

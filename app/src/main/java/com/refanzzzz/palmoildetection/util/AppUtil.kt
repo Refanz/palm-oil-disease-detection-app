@@ -1,0 +1,18 @@
+package com.refanzzzz.palmoildetection.util
+
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
+
+object AppUtil {
+    fun LocalDateTime.toFormattedDateString(): String {
+        val indonesianLocale = Locale("id", "ID")
+        val dayOfWeek = this.dayOfWeek.getDisplayName(TextStyle.FULL, indonesianLocale)
+
+        val dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", indonesianLocale)
+        val formattedDate = this.format(dateFormatter)
+
+        return "$dayOfWeek, $formattedDate"
+    }
+}
