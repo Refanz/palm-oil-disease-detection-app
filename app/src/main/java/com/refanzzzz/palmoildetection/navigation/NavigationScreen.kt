@@ -1,5 +1,6 @@
 package com.refanzzzz.palmoildetection.navigation
 
+import android.net.Uri
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -14,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -25,6 +27,8 @@ import com.refanzzzz.palmoildetection.ui.component.navbar.NavBottomItem
 import com.refanzzzz.palmoildetection.ui.screen.camera.CameraScreen
 import com.refanzzzz.palmoildetection.ui.screen.history.HistoryScreen
 import com.refanzzzz.palmoildetection.ui.screen.main.MainScreen
+import com.refanzzzz.palmoildetection.ui.screen.prediction.PredictionScreen
+import com.refanzzzz.palmoildetection.ui.screen.preview.PreviewScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +67,7 @@ fun NavigationScreen() {
             }
         },
         bottomBar = {
-            if (currentRoute != Screen.Camera.route) {
+            if (bottomNavBarScreens.contains(currentRoute)) {
                 val items = listOf<Screen>(Screen.Home, Screen.History)
 
                 NavBottomContainer {
@@ -91,7 +95,31 @@ fun NavigationScreen() {
                 HistoryScreen()
             }
             composable(Screen.Camera.route) {
-                CameraScreen()
+                CameraScreen(navController)
+            }
+            composable(
+                route = Screen.Preview.route,
+                arguments = Screen.Preview.arguments
+            ) { navBackStackEntry ->
+                val imageUriString = navBackStackEntry.arguments?.getString("imageUri")
+                val imageUri = imageUriString?.let { Uri.decode(it) }?.toUri()
+
+                PreviewScreen(
+                    navController = navController,
+                    imageUri = imageUri!!
+                )
+            }
+            composable(
+                route = Screen.Prediction.route,
+                arguments = Screen.Prediction.arguments
+            ) { navBackStackEntry ->
+                val imageUriString = navBackStackEntry.arguments?.getString("imageUri")
+                val imageUri = imageUriString?.let { Uri.decode(it) }?.toUri()
+
+                PredictionScreen(
+                    navController = navController,
+                    imageUri = imageUri!!
+                )
             }
         }
     }

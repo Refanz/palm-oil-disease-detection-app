@@ -29,7 +29,7 @@ fun DiseaseIcon(disease: String = "healthy") {
         modifier = Modifier
             .size(48.dp)
             .background(
-                color = MaterialTheme.colorScheme.secondary,
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(100.dp)
             )
     )

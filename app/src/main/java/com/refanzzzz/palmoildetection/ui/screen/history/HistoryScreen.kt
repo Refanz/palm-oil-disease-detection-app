@@ -20,14 +20,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.refanzzzz.palmoildetection.data.model.HistoryItem
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.refanzzzz.palmoildetection.ui.component.history.DiseaseIcon
 import com.refanzzzz.palmoildetection.util.AppUtil.toFormattedDateString
 
 @Composable
 fun HistoryScreen() {
 
-    val histories = HistoryItem.getDummyHistory()
+    val historyViewModel = hiltViewModel<HistoryViewModel>()
+
+    val histories = historyViewModel.getHistories().collectAsStateWithLifecycle(listOf())
 
     Column(
         modifier = Modifier
@@ -45,7 +48,7 @@ fun HistoryScreen() {
             contentPadding = PaddingValues(vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(histories) { item ->
+            items(histories.value) { item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

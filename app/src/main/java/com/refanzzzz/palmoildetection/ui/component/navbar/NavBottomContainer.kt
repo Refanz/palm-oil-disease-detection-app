@@ -27,9 +27,11 @@ fun NavBottomContainer(content: @Composable RowScope.() -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = systemBarsBottomPadding)
-            .padding(horizontal = 8.dp, vertical = 8.dp)
             .clip(
-                RoundedCornerShape(24.dp)
+                RoundedCornerShape(
+                    topStart = 24.dp,
+                    topEnd = 24.dp
+                )
             )
             .background(MaterialTheme.colorScheme.surface)
             .height(60.dp),
