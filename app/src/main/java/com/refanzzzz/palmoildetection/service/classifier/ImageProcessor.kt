@@ -2,6 +2,7 @@ package com.refanzzzz.palmoildetection.service.classifier
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.util.Log
 import androidx.core.graphics.scale
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -26,16 +27,23 @@ class ImageProcessor @Inject constructor() {
             resizedBitmap.height
         )
 
-        var pixel = 0
+        var pixelIndex = 0
         for (i in 0 until MODEL_INPUT_SIZE) {
             for (j in 0 until MODEL_INPUT_SIZE) {
-                val `val` = intValues[pixel++]
-                byteBuffer.putFloat(((`val` shr 16 and 0xFF) / 255.0f))
-                byteBuffer.putFloat(((`val` shr 8 and 0xFF) / 255.0f))
-                byteBuffer.putFloat(((`val` and 0xFF) / 255.0f))
+                val pixelValue = intValues[pixelIndex++]
+
+                val red = (pixelValue shr 16 and 0xFF)
+                val green = (pixelValue shr 8 and 0xFF)
+                val blue = (pixelValue and 0xFF)
+
+                // Melakukan normalisasi dari [0, 255] menjadi [-1, 1]
+                byteBuffer.putFloat((red / 127.5f) - 1.0f)
+                byteBuffer.putFloat((green / 127.5f) - 1.0f)
+                byteBuffer.putFloat((blue / 127.5f) - 1.0f)
             }
         }
 
+        Log.d("ImageProcessor", byteBuffer.toString())
         return byteBuffer
     }
 
@@ -50,16 +58,20 @@ class ImageProcessor @Inject constructor() {
     fun convertByteBufferToBitmap(byteBuffer: ByteBuffer, width: Int, height: Int): Bitmap {
         byteBuffer.rewind()
 
-        val bitmap = createBitmap(width, height)
+        val bitmap = createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val intValues = IntArray(width * height)
 
-        var pixel = 0
+        var pixelIndex = 0
         for (i in 0 until height) {
             for (j in 0 until width) {
-                var r = (byteBuffer.float * 255).toInt().coerceIn(0, 255)
-                var g = (byteBuffer.float * 255).toInt().coerceIn(0, 255)
-                var b = (byteBuffer.float * 255).toInt().coerceIn(0, 255)
-                intValues[pixel++] = (0xFF shl 24) or (r shl 16) or (g shl 8) or b
+                val redFloat = byteBuffer.float
+                val greenFloat = byteBuffer.float
+                val blueFloat = byteBuffer.float
+
+                var r = ((redFloat + 1.0f) * 127.5f).toInt().coerceIn(0, 255)
+                var g = ((greenFloat + 1.0f) * 127.5f).toInt().coerceIn(0, 255)
+                var b = ((blueFloat + 1.0f) * 127.5f).toInt().coerceIn(0, 255)
+                intValues[pixelIndex++] = (0xFF shl 24) or (r shl 16) or (g shl 8) or b
             }
         }
 

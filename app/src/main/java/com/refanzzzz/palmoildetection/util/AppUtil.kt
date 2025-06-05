@@ -15,4 +15,8 @@ object AppUtil {
 
         return "$dayOfWeek, $formattedDate"
     }
+
+    fun Float.toFormattedFloat2Decimal(): String {
+        return String.format(Locale("id", "ID"), "%.2f", this)
+    }
 }

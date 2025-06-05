@@ -11,15 +11,16 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.refanzzzz.palmoildetection.R
+import com.refanzzzz.palmoildetection.util.LabelPrediction
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun DiseaseIcon(disease: String = "healthy") {
+fun DiseaseIcon(disease: String = "") {
     val diseaseIconId: Int = when (disease) {
-        "healthy" -> R.drawable.healthy
-        "scale-insect" -> R.drawable.scale_insect
-        "fungal-disease" -> R.drawable.fungal_disease
-        "magnesium-deficiency" -> R.drawable.magnesium_deficiency
+        LabelPrediction.HEALTHY.desc -> R.drawable.healthy
+        LabelPrediction.SCALE_INSECT.desc -> R.drawable.scale_insect
+        LabelPrediction.FUNGAL_DISEASE.desc -> R.drawable.fungal_disease
+        LabelPrediction.MAGNESIUM_DEFICIENCY.desc -> R.drawable.magnesium_deficiency
         else -> R.drawable.healthy
     }
 

@@ -23,8 +23,8 @@ class PredictionViewModel @Inject constructor(
     private val imageProcessor: ImageProcessor
 ) : ViewModel() {
 
-    private val _predictionResult = MutableStateFlow<PredictionResult?>(null)
-    val predictionResult: StateFlow<PredictionResult?> = _predictionResult
+    private val _predictionResult = MutableStateFlow<List<PredictionResult>?>(null)
+    val predictionResult: StateFlow<List<PredictionResult>?> = _predictionResult
 
     fun convertByteBufferToBitmap(byteBuffer: ByteBuffer, width: Int, height: Int): Bitmap {
         return imageProcessor.convertByteBufferToBitmap(byteBuffer, width, height)

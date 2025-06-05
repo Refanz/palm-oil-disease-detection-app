@@ -19,10 +19,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.refanzzzz.palmoildetection.ui.component.history.DiseaseIcon
+import com.refanzzzz.palmoildetection.util.AppUtil.toFormattedFloat2Decimal
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -46,14 +47,11 @@ fun PredictionScreen(
     var inputStream = context.contentResolver.openInputStream(imageUri)
     val processedImage = predictionViewModel.processingImage(inputStream!!, 0)
     val bitmapImage = predictionViewModel.convertByteBufferToBitmap(processedImage, 224, 224)
-
     val scrollState = rememberScrollState()
 
     predictionViewModel.predictDisease(processedImage)
 
     val results by predictionViewModel.predictionResult.collectAsStateWithLifecycle()
-
-
 
     Column(
         verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -74,7 +72,8 @@ fun PredictionScreen(
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            for (i in 0 until 3) {
+
+            results?.map {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -86,16 +85,16 @@ fun PredictionScreen(
                         )
                         .padding(PaddingValues(12.dp))
                 ) {
-                    DiseaseIcon("healthy")
+                    DiseaseIcon(it.label)
                     Column {
                         Text(
-                            text = "Healthy",
+                            text = it.label,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                             color = MaterialTheme.colorScheme.primary
                         )
                         Text(
-                            text = "50% confidence"
+                            text = "Confidence: ${it.confidence.toFormattedFloat2Decimal()}%"
                         )
                     }
                 }

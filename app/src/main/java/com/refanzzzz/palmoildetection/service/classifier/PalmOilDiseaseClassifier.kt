@@ -9,7 +9,7 @@ import java.nio.ByteBuffer
 import javax.inject.Inject
 
 class PalmOilDiseaseClassifier @Inject constructor(private val model: PalmOilModel?) {
-    fun classifyImage(inputBuffer: ByteBuffer): PredictionResult {
+    fun classifyImage(inputBuffer: ByteBuffer): List<PredictionResult> {
         model?.let {
             val inputFeature =
                 TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
@@ -17,24 +17,22 @@ class PalmOilDiseaseClassifier @Inject constructor(private val model: PalmOilMod
 
             val outputs = it.process((inputFeature))
             val outputFeature = outputs.outputFeature0AsTensorBuffer
-
             val probabilities = outputFeature.floatArray
 
-            val maxProbabilityIndex = probabilities.indices.maxByOrNull { probabilities[it] } ?: -1
-            val predictedLabel = if (maxProbabilityIndex != -1) {
-                LabelPrediction.getLabelByIndex(maxProbabilityIndex)
-            } else {
-                "Unknown Prediction"
+            val results = mutableListOf<PredictionResult>()
+
+            probabilities.indices.map {
+                results.add(
+                    PredictionResult(
+                        LabelPrediction.getLabelByIndex(it),
+                        probabilities[it] * 100
+                    )
+                )
             }
 
-            val confidence = probabilities[maxProbabilityIndex] * 100
-            return PredictionResult(predictedLabel, confidence)
+            return results.sortedByDescending { it.confidence }
         } ?: run {
             throw IllegalArgumentException("Model has not been initialized")
         }
-    }
-
-    fun close() {
-        model!!.close()
     }
 }
