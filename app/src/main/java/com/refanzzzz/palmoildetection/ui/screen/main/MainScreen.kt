@@ -1,6 +1,5 @@
 package com.refanzzzz.palmoildetection.ui.screen.main
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,10 +19,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,38 +30,13 @@ import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.refanzzzz.palmoildetection.R
-import com.refanzzzz.palmoildetection.data.response.ResponseState
 import com.refanzzzz.palmoildetection.navigation.Screen
 import com.refanzzzz.palmoildetection.ui.component.CameraButton
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun MainScreen(navController: NavController) {
-
     val mainViewModel = hiltViewModel<MainViewModel>()
-
-    LaunchedEffect(Unit) {
-        mainViewModel.test()
-    }
-
-    when (val result = mainViewModel.testResult.value) {
-        is ResponseState.Loading -> Toast.makeText(
-            LocalContext.current,
-            "Loading..",
-            Toast.LENGTH_SHORT
-        ).show()
-
-        is ResponseState.Success -> Toast.makeText(
-            LocalContext.current,
-            result.data.message.toString(), Toast.LENGTH_SHORT
-        ).show()
-
-        is ResponseState.Error -> Toast.makeText(
-            LocalContext.current,
-            result.error,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
 
     Column(
         modifier = Modifier
@@ -75,6 +47,7 @@ fun MainScreen(navController: NavController) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
+                color = MaterialTheme.colorScheme.primary,
                 fontSize = 32.sp,
                 text = "Oil Palm\nDisease Detection".uppercase(),
                 lineHeight = 32.sp,

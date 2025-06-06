@@ -1,5 +1,7 @@
 package com.refanzzzz.palmoildetection.util
 
+import android.net.Uri
+import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -18,5 +20,9 @@ object AppUtil {
 
     fun Float.toFormattedFloat2Decimal(): String {
         return String.format(Locale("id", "ID"), "%.2f", this)
+    }
+
+    fun Uri.getImageFile(): File? {
+        return File(this.path!!)
     }
 }

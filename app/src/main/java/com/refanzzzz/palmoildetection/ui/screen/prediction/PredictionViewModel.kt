@@ -20,7 +20,7 @@ import java.nio.ByteBuffer
 @HiltViewModel
 class PredictionViewModel @Inject constructor(
     private val palmOilDiseaseClassifier: PalmOilDiseaseClassifier,
-    private val imageProcessor: ImageProcessor
+    private val imageProcessor: ImageProcessor,
 ) : ViewModel() {
 
     private val _predictionResult = MutableStateFlow<List<PredictionResult>?>(null)

@@ -19,7 +19,7 @@ interface ApiService {
     @Multipart
     @POST("/api/v1/classify")
     suspend fun predict(
-        @Part("input_data") image: MultipartBody.Part
+        @Part image: MultipartBody.Part
     ): PredictResponse
 
 

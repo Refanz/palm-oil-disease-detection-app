@@ -24,6 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.refanzzzz.palmoildetection.ui.component.navbar.NavBottomContainer
 import com.refanzzzz.palmoildetection.ui.component.navbar.NavBottomItem
+import com.refanzzzz.palmoildetection.ui.screen.onboarding.OnboardingScreen
 import com.refanzzzz.palmoildetection.ui.screen.camera.CameraScreen
 import com.refanzzzz.palmoildetection.ui.screen.history.HistoryScreen
 import com.refanzzzz.palmoildetection.ui.screen.main.MainScreen
@@ -44,7 +45,7 @@ fun NavigationScreen() {
 
     Scaffold(
         topBar = {
-            if (!bottomNavBarScreens.contains(currentRoute)) {
+            if (!bottomNavBarScreens.contains(currentRoute) && !currentRoute.equals(Screen.Onboarding.route)) {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
@@ -85,9 +86,12 @@ fun NavigationScreen() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route,
+            startDestination = Screen.Onboarding.route,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.Onboarding.route) {
+                OnboardingScreen(navController)
+            }
             composable(Screen.Home.route) {
                 MainScreen(navController)
             }

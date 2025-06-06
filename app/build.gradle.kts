@@ -103,4 +103,7 @@ dependencies {
 
     // lottie
     implementation(libs.lottie.compose)
+
+    // data store
+    implementation(libs.androidx.datastore.preferences)
 }

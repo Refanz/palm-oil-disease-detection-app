@@ -27,12 +27,12 @@ fun NavBottomItem(modifier: Modifier = Modifier, screen: Screen, onClick: () -> 
             }
     ) {
         Icon(
-            imageVector = screen.icon,
+            imageVector = screen.icon!!,
             contentDescription = screen.title,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(24.dp)
         )
-        Text(screen.title, color = MaterialTheme.colorScheme.primary)
+        Text(screen.title!!, color = MaterialTheme.colorScheme.primary)
 
     }
 }
