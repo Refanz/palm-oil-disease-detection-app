@@ -2,6 +2,7 @@ package com.refanzzzz.palmoildetection.util
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import java.io.File
 import java.io.InputStream
 import java.text.SimpleDateFormat
@@ -43,5 +44,13 @@ object AppUtil {
         val outputStream = myImage.outputStream()
         inputStream.copyTo(outputStream)
         return myImage
+    }
+
+    fun Uri.convertUriToString(): String {
+        return this.toString()
+    }
+
+    fun String.convertStringToUri(): Uri {
+        return this.toUri()
     }
 }

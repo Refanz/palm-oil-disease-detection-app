@@ -1,197 +1,36 @@
 package com.refanzzzz.palmoildetection.data.repository
 
-import com.refanzzzz.palmoildetection.data.model.HistoryItem
-import kotlinx.coroutines.Dispatchers
+import com.refanzzzz.palmoildetection.data.dao.PredictHistoryDao
+import com.refanzzzz.palmoildetection.data.entity.PredictDiseaseItem
+import com.refanzzzz.palmoildetection.data.entity.PredictHistoryItem
+import com.refanzzzz.palmoildetection.data.entity.PredictHistoryWithDisease
+import com.refanzzzz.palmoildetection.data.response.ResponseState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import java.time.LocalDateTime
 import javax.inject.Inject
 
-class HistoryRepository @Inject constructor() {
-    fun getDummyHistory(): Flow<List<HistoryItem>> = flow {
-        val histories = listOf<HistoryItem>(
-            HistoryItem(
-                name = "Healthy",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "healthy"
-            ),
-            HistoryItem(
-                name = "Fungal Disease",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "fungal-disease"
-            ),
-            HistoryItem(
-                name = "Scale Insect",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "scale-insect"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Magnesium Deficiency",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "magnesium-deficiency"
-            ),
-            HistoryItem(
-                name = "Healthy",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "healthy"
-            ),
-            HistoryItem(
-                name = "Fungal Disease",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "fungal-disease"
-            ),
-            HistoryItem(
-                name = "Scale Insect",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "scale-insect"
-            ),
-            HistoryItem(
-                name = "Healthy",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "healthy"
-            ),
-            HistoryItem(
-                name = "Fungal Disease",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "fungal-disease"
-            ),
-            HistoryItem(
-                name = "Scale Insect",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "scale-insect"
-            ),
-            HistoryItem(
-                name = "Healthy",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "healthy"
-            ),
-            HistoryItem(
-                name = "Fungal Disease",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "fungal-disease"
-            ),
-            HistoryItem(
-                name = "Scale Insect",
-                timestamp = LocalDateTime.now(),
-                description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki",
-                disease = "scale-insect"
-            )
-        ).toList()
-        emit(histories)
-    }.flowOn(Dispatchers.IO)
+class HistoryRepository @Inject constructor(private val predictHistoryDao: PredictHistoryDao) {
+
+    suspend fun saveHistoryWithDiseases(
+        predictHistory: PredictHistoryItem,
+        diseases: List<PredictDiseaseItem>
+    ) {
+        val historyId = predictHistoryDao.insertHistory(predictHistory)
+
+        diseases.forEach { disease ->
+            val disease = disease.copy(historyId = historyId)
+            predictHistoryDao.insertDisease(disease)
+        }
+    }
+
+    fun getHistories(): Flow<ResponseState<List<PredictHistoryWithDisease>>> = flow {
+        emit(ResponseState.Loading)
+
+        try {
+            val histories = predictHistoryDao.getHistoriesWithDiseases()
+            emit(ResponseState.Success(histories))
+        } catch (e: Exception) {
+            emit(ResponseState.Error(e.message ?: "Unknown error occurred"))
+        }
+    }
 }

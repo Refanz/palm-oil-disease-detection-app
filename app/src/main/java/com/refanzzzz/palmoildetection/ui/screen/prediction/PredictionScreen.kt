@@ -1,5 +1,6 @@
 package com.refanzzzz.palmoildetection.ui.screen.prediction
 
+import android.content.Context
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,19 +36,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.refanzzzz.palmoildetection.data.entity.PredictHistoryItem
+import com.refanzzzz.palmoildetection.data.response.PredictItem
 import com.refanzzzz.palmoildetection.data.response.ResponseState
 import com.refanzzzz.palmoildetection.ui.component.ScanLoading
 import com.refanzzzz.palmoildetection.ui.component.history.DiseaseIcon
 import com.refanzzzz.palmoildetection.util.AppUtil.getImageFile
+import com.refanzzzz.palmoildetection.util.AppUtil.toFormattedDateString
 import com.refanzzzz.palmoildetection.util.AppUtil.toFormattedFloat2Decimal
+import java.time.LocalDateTime
 
-@OptIn(ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PredictionScreen(
     navController: NavController,
     imageUri: Uri
 ) {
     val predictionViewModel = hiltViewModel<PredictionViewModel>()
+
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
@@ -87,7 +94,13 @@ fun PredictionScreen(
 
                     PredictionExplain()
 
-                    PredictionAction(navController)
+                    PredictionAction(
+                        context,
+                        navController,
+                        predictionViewModel,
+                        result.data.predictions,
+                        imageUri
+                    )
                 }
             }
         }
@@ -158,7 +171,11 @@ fun PredictionResultItem(
 
 @Composable
 fun PredictionAction(
-    navController: NavController
+    context: Context,
+    navController: NavController,
+    predictionViewModel: PredictionViewModel,
+    predictResult: List<PredictItem>,
+    imageUri: Uri
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -173,7 +190,22 @@ fun PredictionAction(
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
                 .fillMaxWidth(),
-            onClick = {}
+            onClick = {
+                predictionViewModel.savePredictHistory(
+                    PredictHistoryItem(
+                        explain = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore",
+                        imageUri = imageUri.toString(),
+                        predictDate = LocalDateTime.now().toFormattedDateString(),
+                    ),
+                    predictResult
+                ) {
+                    Toast.makeText(
+                        context,
+                        "Successfully save prediction history",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         ) {
             Text(
                 text = "Save to History",
