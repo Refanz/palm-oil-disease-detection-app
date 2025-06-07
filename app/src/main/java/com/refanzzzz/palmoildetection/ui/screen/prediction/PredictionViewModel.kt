@@ -3,60 +3,44 @@ package com.refanzzzz.palmoildetection.ui.screen.prediction
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.refanzzzz.palmoildetection.data.model.PredictionResult
+import com.refanzzzz.palmoildetection.data.repository.PredictRepository
+import com.refanzzzz.palmoildetection.data.response.PredictResponse
+import com.refanzzzz.palmoildetection.data.response.ResponseState
 import com.refanzzzz.palmoildetection.service.classifier.ImageProcessor
-import com.refanzzzz.palmoildetection.service.classifier.PalmOilDiseaseClassifier
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import java.io.File
 import java.io.InputStream
 import java.nio.ByteBuffer
 
 @HiltViewModel
 class PredictionViewModel @Inject constructor(
-    private val palmOilDiseaseClassifier: PalmOilDiseaseClassifier,
-    private val imageProcessor: ImageProcessor,
+    private val predictRepository: PredictRepository
 ) : ViewModel() {
 
-    private val _predictionResult = MutableStateFlow<List<PredictionResult>?>(null)
-    val predictionResult: StateFlow<List<PredictionResult>?> = _predictionResult
+    private val _predictResult: MutableState<ResponseState<PredictResponse>> = mutableStateOf(
+        ResponseState.Loading
+    )
+    val predictResult: State<ResponseState<PredictResponse>> = _predictResult
 
-    fun convertByteBufferToBitmap(byteBuffer: ByteBuffer, width: Int, height: Int): Bitmap {
-        return imageProcessor.convertByteBufferToBitmap(byteBuffer, width, height)
-    }
-
-    fun processingImage(inputStream: InputStream, rotationDegrees: Int): ByteBuffer {
-        var originalBitmap: Bitmap? = null
-        var decodedBitmap: ByteBuffer? = null
-
-        try {
-            originalBitmap = BitmapFactory.decodeStream(inputStream)
-
-            if (originalBitmap != null) {
-                val rotatedBitmap = imageProcessor.rotateBitmap(originalBitmap, rotationDegrees)
-                val inputBuffer = imageProcessor.convertBitmapToByteBuffer(rotatedBitmap)
-
-                decodedBitmap = inputBuffer
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, e.message, e)
-        } finally {
-            inputStream.close()
-            originalBitmap?.recycle()
-        }
-
-        return decodedBitmap!!
-    }
-
-    fun predictDisease(imgPrediction: ByteBuffer) {
+    fun predict(imageFile: File) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = palmOilDiseaseClassifier.classifyImage(imgPrediction)
-            _predictionResult.value = result
+            predictRepository.predict(imageFile).onStart {
+                _predictResult.value = ResponseState.Loading
+            }.catch {
+                _predictResult.value = ResponseState.Error(it.message ?: "")
+            }.collect {
+                _predictResult.value = it
+            }
         }
     }
 

@@ -10,9 +10,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -53,8 +57,10 @@ fun NavigationScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    var scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
         topBar = {
             if (!bottomNavBarScreens.contains(currentRoute) && !fullScreens.contains(currentRoute)) {
                 CenterAlignedTopAppBar(
@@ -62,9 +68,13 @@ fun NavigationScreen() {
                         Text(
                             fontWeight = FontWeight.Bold,
                             text = Screen.getScreenTitleByRoute(currentRoute ?: ""),
-                            fontSize = 32.sp
+                            fontSize = 24.sp
                         )
                     },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Transparent,
+                        scrolledContainerColor = Color.Transparent
+                    ),
                     navigationIcon = {
                         IconButton(
                             onClick = { navController.popBackStack() }
@@ -74,7 +84,8 @@ fun NavigationScreen() {
                                 contentDescription = "Back"
                             )
                         }
-                    }
+                    },
+                    scrollBehavior = scrollBehaviour
                 )
             }
         },

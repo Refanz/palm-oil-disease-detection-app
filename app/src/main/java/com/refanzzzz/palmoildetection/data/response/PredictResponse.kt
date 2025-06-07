@@ -11,7 +11,7 @@ data class PredictItem(
     @SerializedName("label")
     val prediction: String,
     @SerializedName("confidence")
-    val confidence: Double
+    val confidence: Float
 )
 
 

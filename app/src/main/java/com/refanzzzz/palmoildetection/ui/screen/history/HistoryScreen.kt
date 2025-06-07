@@ -41,6 +41,7 @@ fun HistoryScreen() {
             text = "History",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .padding(vertical = 8.dp)
         )

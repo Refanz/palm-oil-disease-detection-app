@@ -36,7 +36,7 @@ class OnboardingRepository @Inject constructor(
     )
 
     val currentOnboardingStatus: Flow<ScreenState<Boolean>> = dataStore.data.map { pref ->
-        delay(3000)
+        delay(2000)
         ScreenState.Show(pref[onboardingKey] == true)
     }
 

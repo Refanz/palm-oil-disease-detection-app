@@ -2,6 +2,8 @@ package com.refanzzzz.palmoildetection.data.repository
 
 import android.util.Log
 import com.refanzzzz.palmoildetection.data.remote.ApiService
+import com.refanzzzz.palmoildetection.data.response.PredictItem
+import com.refanzzzz.palmoildetection.data.response.PredictResponse
 import com.refanzzzz.palmoildetection.data.response.ResponseState
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.catch
@@ -40,7 +42,20 @@ class PredictRepository @Inject constructor(private val apiService: ApiService) 
 
         try {
             val successResponse = apiService.predict(multipartBody)
-            emit(ResponseState.Success(successResponse))
+
+            val precessedResponse = successResponse.predictions.map {
+                PredictItem(
+                    prediction = it.prediction,
+                    confidence = it.confidence * 100
+                )
+            }
+
+            emit(
+                ResponseState.Success(
+                    PredictResponse(
+                    precessedResponse.sortedByDescending { it.confidence }
+                )
+            ))
         } catch (e: HttpException) {
             Log.e(TAG, e.message, e)
             emit(ResponseState.Error(e.message.toString()))

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("androidx.room")
     alias(libs.plugins.jetbrainsKotlinSerialization)
 }
 
@@ -40,6 +41,10 @@ android {
     buildFeatures {
         compose = true
         mlModelBinding = true
+    }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 }
 
@@ -92,10 +97,6 @@ dependencies {
     // coroutine
     implementation(libs.kotlinx.coroutines.android)
 
-    //tflite
-    implementation(libs.litert.support)
-    implementation(libs.litert.metadata)
-
     // retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -106,4 +107,8 @@ dependencies {
 
     // data store
     implementation(libs.androidx.datastore.preferences)
+
+    // room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 }
