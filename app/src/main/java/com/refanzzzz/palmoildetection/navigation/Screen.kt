@@ -12,7 +12,8 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 sealed class Screen(val route: String, val icon: ImageVector?, val title: String?) {
-    object Onboarding: Screen("onboarding", null, "Onboarding")
+    object Loading : Screen("loading", null, "Loading")
+    object Onboarding : Screen("onboarding", null, "Onboarding")
     object Home : Screen("home", Icons.Default.Home, "Home")
     object History : Screen("history", Icons.Default.History, "History")
     object Camera : Screen("camera", Icons.Default.Camera, "Camera")

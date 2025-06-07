@@ -16,18 +16,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.refanzzzz.palmoildetection.ui.component.ScanLoading
 import com.refanzzzz.palmoildetection.ui.component.navbar.NavBottomContainer
 import com.refanzzzz.palmoildetection.ui.component.navbar.NavBottomItem
-import com.refanzzzz.palmoildetection.ui.screen.onboarding.OnboardingScreen
 import com.refanzzzz.palmoildetection.ui.screen.camera.CameraScreen
 import com.refanzzzz.palmoildetection.ui.screen.history.HistoryScreen
 import com.refanzzzz.palmoildetection.ui.screen.main.MainScreen
+import com.refanzzzz.palmoildetection.ui.screen.onboarding.OnboardingScreen
+import com.refanzzzz.palmoildetection.ui.screen.onboarding.OnboardingViewModel
 import com.refanzzzz.palmoildetection.ui.screen.prediction.PredictionScreen
 import com.refanzzzz.palmoildetection.ui.screen.preview.PreviewScreen
 
@@ -35,8 +39,15 @@ import com.refanzzzz.palmoildetection.ui.screen.preview.PreviewScreen
 @Composable
 fun NavigationScreen() {
 
+    val onboardingViewModel = hiltViewModel<OnboardingViewModel>()
+    val onboardingCompleted by onboardingViewModel.onboardingCompleted.collectAsStateWithLifecycle()
+
     val bottomNavBarScreens = listOf<String>(
         Screen.Home.route, Screen.History.route
+    )
+
+    val fullScreens = listOf<String>(
+        Screen.Loading.route, Screen.Onboarding.route
     )
 
     val navController = rememberNavController()
@@ -45,7 +56,7 @@ fun NavigationScreen() {
 
     Scaffold(
         topBar = {
-            if (!bottomNavBarScreens.contains(currentRoute) && !currentRoute.equals(Screen.Onboarding.route)) {
+            if (!bottomNavBarScreens.contains(currentRoute) && !fullScreens.contains(currentRoute)) {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
@@ -86,11 +97,21 @@ fun NavigationScreen() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Onboarding.route,
+            startDestination = when (onboardingCompleted) {
+                is ScreenState.Loading -> Screen.Loading.route
+                is ScreenState.Show -> if ((onboardingCompleted as ScreenState.Show<Boolean>).data) {
+                    Screen.Home.route
+                } else {
+                    Screen.Onboarding.route
+                }
+            },
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.Loading.route) {
+                ScanLoading()
+            }
             composable(Screen.Onboarding.route) {
-                OnboardingScreen(navController)
+                OnboardingScreen()
             }
             composable(Screen.Home.route) {
                 MainScreen(navController)

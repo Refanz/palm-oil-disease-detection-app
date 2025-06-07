@@ -6,7 +6,9 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import com.refanzzzz.palmoildetection.R
 import com.refanzzzz.palmoildetection.data.model.OnboardingDataItem
+import com.refanzzzz.palmoildetection.navigation.ScreenState
 import jakarta.inject.Inject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -33,8 +35,9 @@ class OnboardingRepository @Inject constructor(
         )
     )
 
-    val currentOnboardingStatus: Flow<Boolean> = dataStore.data.map { pref ->
-        pref[onboardingKey] ?: false
+    val currentOnboardingStatus: Flow<ScreenState<Boolean>> = dataStore.data.map { pref ->
+        delay(3000)
+        ScreenState.Show(pref[onboardingKey] == true)
     }
 
     suspend fun saveOnboardingStatus(onboardingCompleted: Boolean) {
@@ -44,7 +47,7 @@ class OnboardingRepository @Inject constructor(
     }
 
 
-    fun getOnboardingItems() = flow {
+    fun getOnboardingItems(): Flow<List<OnboardingDataItem>> = flow {
         emit(onboardingItems)
     }
 

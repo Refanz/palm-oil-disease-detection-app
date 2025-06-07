@@ -19,7 +19,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,26 +33,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.refanzzzz.palmoildetection.R
-import com.refanzzzz.palmoildetection.navigation.Screen
+import com.refanzzzz.palmoildetection.data.model.OnboardingDataItem
 
 @Composable
-fun OnboardingScreen(navController: NavController) {
+fun OnboardingScreen() {
 
     val onboardingViewModel = hiltViewModel<OnboardingViewModel>()
-    val onboardingCompleted by onboardingViewModel.isOnboardingCompleted.collectAsStateWithLifecycle()
+    val onboardingItems by onboardingViewModel.onboardingItems.collectAsStateWithLifecycle()
 
-    LaunchedEffect(onboardingCompleted) {
-        if (onboardingCompleted) {
-            navController.navigate(Screen.Home.route) {
-                launchSingleTop = true
-
-                popUpTo(Screen.Onboarding.route) {
-                    inclusive = true
-                }
-            }
-        }
-    }
 
     val pagerState = rememberPagerState(pageCount = {
         3
@@ -69,13 +56,16 @@ fun OnboardingScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            OnboardingItem(
-                imageResId = R.drawable.first_onboarding,
-                title = "Camera Detection",
-                desc = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore"
-            )
 
-            OnboardingButton(navController, onboardingViewModel, pagerState)
+            if (onboardingItems != emptyList<OnboardingDataItem>()) {
+                OnboardingItem(
+                    imageResId = onboardingItems[page].imageResId,
+                    title = onboardingItems[page].title,
+                    desc = onboardingItems[page].desc
+                )
+            }
+
+            OnboardingButton(onboardingViewModel, pagerState)
         }
     }
 }
@@ -118,7 +108,6 @@ fun OnboardingItem(imageResId: Int, title: String, desc: String) {
 
 @Composable
 fun OnboardingButton(
-    navController: NavController,
     onboardingViewModel: OnboardingViewModel,
     pagerState: PagerState
 ) {
@@ -181,5 +170,5 @@ fun OnboardingButtonItem(isActive: Boolean = false) {
 @Preview(showBackground = true)
 @Composable
 fun OnboardingScreenPreview() {
-    OnboardingScreen(navController = NavController(LocalContext.current))
+    OnboardingScreen()
 }

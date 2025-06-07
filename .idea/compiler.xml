@@ -4,6 +4,7 @@
     <bytecodeTargetLevel>
       <module name="PalmDetect.app" target="21" />
       <module name="palmoildetection.app" target="21" />
+      <module name="palmoildetection.PalmDetect.app" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
