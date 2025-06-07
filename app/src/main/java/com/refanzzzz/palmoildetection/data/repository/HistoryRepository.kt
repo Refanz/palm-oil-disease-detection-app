@@ -33,4 +33,15 @@ class HistoryRepository @Inject constructor(private val predictHistoryDao: Predi
             emit(ResponseState.Error(e.message ?: "Unknown error occurred"))
         }
     }
+
+    fun getHistoryWithDiseaseById(id: Int): Flow<ResponseState<PredictHistoryWithDisease>> = flow {
+        emit(ResponseState.Loading)
+
+        try {
+            val history = predictHistoryDao.getHistoryWithDiseaseById(id)
+            emit(ResponseState.Success(history))
+        } catch (e: Exception) {
+            emit(ResponseState.Error(e.message ?: "Unknown error occurred"))
+        }
+    }
 }

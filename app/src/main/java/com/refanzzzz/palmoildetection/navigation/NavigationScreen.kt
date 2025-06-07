@@ -11,9 +11,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +35,7 @@ import com.refanzzzz.palmoildetection.ui.screen.history.HistoryScreen
 import com.refanzzzz.palmoildetection.ui.screen.main.MainScreen
 import com.refanzzzz.palmoildetection.ui.screen.onboarding.OnboardingScreen
 import com.refanzzzz.palmoildetection.ui.screen.onboarding.OnboardingViewModel
+import com.refanzzzz.palmoildetection.ui.screen.history.PredictionHistoryScreen
 import com.refanzzzz.palmoildetection.ui.screen.prediction.PredictionScreen
 import com.refanzzzz.palmoildetection.ui.screen.preview.PreviewScreen
 
@@ -129,7 +128,7 @@ fun NavigationScreen() {
                 MainScreen(navController)
             }
             composable(Screen.History.route) {
-                HistoryScreen()
+                HistoryScreen(navController)
             }
             composable(Screen.Camera.route) {
                 CameraScreen(navController)
@@ -157,6 +156,13 @@ fun NavigationScreen() {
                     navController = navController,
                     imageUri = imageUri!!
                 )
+            }
+            composable(
+                route = Screen.PredictionHistory.route,
+                arguments = Screen.PredictionHistory.arguments
+            ) { navBackStackEntry ->
+                val historyId = navBackStackEntry.arguments?.getString("historyId")
+                PredictionHistoryScreen(historyId!!)
             }
         }
     }

@@ -154,7 +154,7 @@ fun PredictionResultItem(
             )
             .padding(PaddingValues(12.dp))
     ) {
-        DiseaseIcon(label)
+        DiseaseIcon(disease = label)
         Column {
             Text(
                 text = label,

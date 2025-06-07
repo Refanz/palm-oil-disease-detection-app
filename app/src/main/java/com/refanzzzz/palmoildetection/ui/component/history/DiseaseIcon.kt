@@ -15,7 +15,10 @@ import com.refanzzzz.palmoildetection.util.LabelPrediction
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun DiseaseIcon(disease: String = "") {
+fun DiseaseIcon(
+    modifier: Modifier = Modifier,
+    disease: String = ""
+) {
     val diseaseIconId: Int = when (disease) {
         LabelPrediction.HEALTHY.desc -> R.drawable.healthy
         LabelPrediction.SCALE_INSECT.desc -> R.drawable.scale_insect
@@ -27,7 +30,7 @@ fun DiseaseIcon(disease: String = "") {
     GlideImage(
         model = diseaseIconId,
         contentDescription = disease,
-        modifier = Modifier
+        modifier = modifier
             .size(48.dp)
             .background(
                 color = MaterialTheme.colorScheme.surface,

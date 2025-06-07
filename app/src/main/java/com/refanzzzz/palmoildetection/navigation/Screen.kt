@@ -18,6 +18,19 @@ sealed class Screen(val route: String, val icon: ImageVector?, val title: String
     object History : Screen("history", Icons.Default.History, "History")
     object Camera : Screen("camera", Icons.Default.Camera, "Camera")
 
+    object PredictionHistory : Screen("predictionHistory/{historyId}", null, "History") {
+        fun createRoute(historyId: String): String {
+            return "predictionHistory/$historyId"
+        }
+
+        val arguments: List<NamedNavArgument>
+            get() = listOf(
+                navArgument("historyId") {
+                    type = NavType.StringType
+                    nullable = false
+                })
+    }
+
     object Prediction : Screen("prediction/{imageUri}", Icons.Default.ImageSearch, "Prediction") {
         fun createRoute(imageUri: Uri): String {
             val encodedUri = Uri.encode(imageUri.toString())

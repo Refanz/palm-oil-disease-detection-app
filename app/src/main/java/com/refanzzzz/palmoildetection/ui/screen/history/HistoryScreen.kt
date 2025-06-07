@@ -2,6 +2,7 @@ package com.refanzzzz.palmoildetection.ui.screen.history
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,12 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.refanzzzz.palmoildetection.data.entity.PredictHistoryWithDisease
 import com.refanzzzz.palmoildetection.data.response.ResponseState
+import com.refanzzzz.palmoildetection.navigation.Screen
 import com.refanzzzz.palmoildetection.ui.component.ScanLoading
 import com.refanzzzz.palmoildetection.ui.component.history.DiseaseIcon
 
 @Composable
-fun HistoryScreen() {
+fun HistoryScreen(
+    navController: NavController
+) {
 
     val historyViewModel = hiltViewModel<HistoryViewModel>()
     val context = LocalContext.current
@@ -67,31 +74,8 @@ fun HistoryScreen() {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(histories.data) { item ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                                .padding(16.dp)
-                        ) {
-                            DiseaseIcon(disease = item.predictDiseases.first().name)
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Text(
-                                    text = item.predictDiseases.first().name,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    text = item.predictHistory.predictDate,
-                                    fontSize = 16.sp
-                                )
-                            }
+                        HistoryItem(item) {
+                            navController.navigate(Screen.PredictionHistory.createRoute(it))
                         }
                     }
                 }
@@ -100,8 +84,41 @@ fun HistoryScreen() {
     }
 }
 
+@Composable
+fun HistoryItem(item: PredictHistoryWithDisease, onItemClick: (id: String) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.onPrimary,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(16.dp)
+            .clickable(true) {
+                onItemClick(item.predictHistory.id.toString())
+            }
+    ) {
+        DiseaseIcon(disease = item.predictDiseases.first().name)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = item.predictDiseases.first().name,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = item.predictHistory.predictDate,
+                fontSize = 16.sp
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewHistoryScreen() {
-    HistoryScreen()
+    HistoryScreen(navController = rememberNavController())
 }

@@ -18,12 +18,18 @@ interface PredictHistoryDao {
     suspend fun getHistories(): List<PredictHistory>
 
     @Transaction
-    @Query("SELECT * FROM histories")
+    @Query("SELECT * FROM histories ORDER BY id DESC")
     suspend fun getHistoriesWithDiseases(): List<PredictHistoryWithDisease>
 
+    @Transaction
+    @Query("SELECT * FROM histories WHERE id = :id")
+    suspend fun getHistoryWithDiseaseById(id: Int): PredictHistoryWithDisease
+
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE, entity = PredictHistory::class)
     suspend fun insertHistory(predictHistory: PredictHistoryItem): Long
 
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE, entity = PredictDisease::class)
     suspend fun insertDisease(predictDisease: PredictDiseaseItem)
 }
