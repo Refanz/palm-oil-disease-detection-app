@@ -57,10 +57,8 @@ fun NavigationScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
         topBar = {
             if (!bottomNavBarScreens.contains(currentRoute) && !fullScreens.contains(currentRoute)) {
                 CenterAlignedTopAppBar(
@@ -84,8 +82,7 @@ fun NavigationScreen() {
                                 contentDescription = "Back"
                             )
                         }
-                    },
-                    scrollBehavior = scrollBehaviour
+                    }
                 )
             }
         },
